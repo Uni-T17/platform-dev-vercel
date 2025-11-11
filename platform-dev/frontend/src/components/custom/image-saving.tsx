@@ -16,7 +16,6 @@ type ImageSavingProps<T extends FieldValues> = {
 export default function ImageSaving<T extends FieldValues>({
     control,
     path,
-    onSave
 } : ImageSavingProps<T>) {
 
     const fileInputRef = useRef<HTMLInputElement | null>(null)
@@ -24,7 +23,7 @@ export default function ImageSaving<T extends FieldValues>({
 
 
     const {
-    field: { value, onChange, name, ref },
+    field: { onChange, name },
     } = useController({ control, name: path as any });
 
      const changeFile = (e : ChangeEvent<HTMLInputElement>) => {

@@ -1,4 +1,3 @@
-/* eslint-disable @next/next/no-img-element */
 "use client";
 
 import React from "react";
@@ -43,7 +42,7 @@ type Props = { book: BookType };
 
 function BookCard({ book }: Props) {
 
-  const {isAuth, authOpen , openAuth} = useAuthStore();
+  const {isAuth , openAuth} = useAuthStore();
 
   const result = BookSchema.safeParse(book);
   const router = useRouter();

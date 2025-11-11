@@ -16,8 +16,7 @@ type ConditionsProps<T extends FieldValues> = {
 export default function ConditonCard<T extends FieldValues> (
     {control, 
     path,
-    label,
-    className, 
+    label, 
     options} : ConditionsProps<T>) {
 
         return(

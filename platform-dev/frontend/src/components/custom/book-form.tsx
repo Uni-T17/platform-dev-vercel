@@ -1,6 +1,6 @@
 "use client"
 
-import { Card, CardContent, CardTitle } from "../ui/card";
+import { Card, CardContent } from "../ui/card";
 import { BookDetailsSchema, BookDetailsType } from "@/lib/model/book-detail-schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import CustomInput from "./form-item";
