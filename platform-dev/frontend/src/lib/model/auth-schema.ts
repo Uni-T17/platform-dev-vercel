@@ -1,33 +1,34 @@
-import {email, z} from "zod"
+import { z } from "zod";
 
 export const SignInSchema = z.object({
-    email : z.string(),
-    password : z.string().min(6)
-})
+  email: z.string().email().nonempty(),
+  password: z.string().min(6),
+});
 
-export type SignInForm = z.infer<typeof SignInSchema>
+export type SignInForm = z.infer<typeof SignInSchema>;
 
-export const SignUpSchema = z.object({
-    name : z.string(),
-    email : z.string(),
-    password : z.string().min(6),
-    confirmPassword : z.string()
-}).refine((data) => data.password === data.confirmPassword, {
-    path : ["confirmPassword"],
-})
+export const SignUpSchema = z
+  .object({
+    name: z.string(),
+    email: z.string().email().nonempty(),
+    password: z.string().min(6),
+    confirmPassword: z.string(),
+  })
+  .refine((data) => data.password === data.confirmPassword, {
+    path: ["confirmPassword"],
+  });
 
-export type SignUpForm = z.infer<typeof SignUpSchema>
+export type SignUpForm = z.infer<typeof SignUpSchema>;
 
 export const RequestOtpSchema = z.object({
-    email : z.email().nonempty("please enter email"),
-})
+  email: z.string().email().nonempty("please enter email"),
+});
 
-export type RequestOtpForm = z.infer<typeof RequestOtpSchema>
+export type RequestOtpForm = z.infer<typeof RequestOtpSchema>;
 
 export const VarifyOtpSchema = z.object({
-    email : z.email().nonempty("please enter email"),
-    otp : z.number()
-})
+  email: z.string().email().nonempty("please enter email"),
+  otp: z.number(),
+});
 
-export type VarifyOtpForm = z.infer<typeof VarifyOtpSchema>
-
+export type VarifyOtpForm = z.infer<typeof VarifyOtpSchema>;

@@ -14,8 +14,8 @@ import {
 } from "@/components/ui/card";
 import { Category, Condition } from "@/lib/model/book";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 import { primary_color } from "@/app/color";
+import Image from "next/image";
 import { AspectRatio } from "../ui/aspect-ratio";
 import { useAuthStore } from "@/lib/model/auth-store";
 
@@ -41,12 +41,9 @@ export type BookType = z.infer<typeof BookSchema>;
 type Props = { book: BookType };
 
 function BookCard({ book }: Props) {
-
-  const {isAuth , openAuth} = useAuthStore();
+  const { isAuth, openAuth } = useAuthStore();
 
   const result = BookSchema.safeParse(book);
-  const router = useRouter();
-  const handleView = () => router.push(`/books/${book.id}`);
 
   if (!result.success) {
     console.error(result.error.flatten());
@@ -66,11 +63,15 @@ function BookCard({ book }: Props) {
           {props.credits} credits
         </div>
         <AspectRatio ratio={4 / 5} className="w-full rounded- overflow-hidden">
-          <img
-            src={props.image}
-            alt={props.title}
-            className="w-full h-full object-cover "
-          />
+          {props.image ? (
+            <Image
+              src={props.image}
+              alt={props.title}
+              width={400}
+              height={500}
+              className="w-full h-full object-cover"
+            />
+          ) : null}
         </AspectRatio>
       </CardHeader>
 
@@ -111,16 +112,18 @@ function BookCard({ book }: Props) {
         </div>
       </CardContent>
 
-
-
       {/* Button footer */}
       <CardFooter className="mt-auto flex justify-between items-center px-4 pb-4">
-        <Link href={isAuth ? `/books/${book.id}` : '#'} onClick={(e) => {
-          if(!isAuth){
-            e.preventDefault()
-            openAuth()
-          }
-        }} className="w-full">
+        <Link
+          href={isAuth ? `/books/${book.id}` : "#"}
+          onClick={(e) => {
+            if (!isAuth) {
+              e.preventDefault();
+              openAuth();
+            }
+          }}
+          className="w-full"
+        >
           <Button
             className=" hover:bg-[#1A7A7A] w-full text-white pb-2 px-4 rounded-lg"
             style={{ backgroundColor: primary_color }}

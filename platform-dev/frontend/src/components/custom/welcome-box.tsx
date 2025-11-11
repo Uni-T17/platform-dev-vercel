@@ -2,11 +2,11 @@
 import React, { useState } from "react";
 import AuthDialog from "./auth-dialog";
 import { useAuthStore } from "@/lib/model/auth-store";
-import { is } from "zod/v4/locales";
 import Link from "next/link";
 import { Button } from "../ui/button";
 import { primary_color } from "@/app/color";
-import { Book, CreditCard, PersonStandingIcon, PlusIcon, User } from "lucide-react";
+import { Book, CreditCard, PlusIcon, User } from "lucide-react";
+import Image from "next/image";
 
 function WelcomeBox() {
   const { isAuth } = useAuthStore();
@@ -24,9 +24,11 @@ function WelcomeBox() {
             min-h-[220px]"
     >
       <div className="justify-center flex">
-        <img
-          src="logo.png"
+        <Image
+          src="/logo.png"
           alt="logo"
+          width={120}
+          height={120}
           className="w-30 h-30 bg-muted-foreground rounded-full"
         />
       </div>

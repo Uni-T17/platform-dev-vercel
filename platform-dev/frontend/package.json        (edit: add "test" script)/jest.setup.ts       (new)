@@ -1,0 +1,54 @@
+{
+  "name": "bookex",
+  "version": "0.1.0",
+  "scripts": {
+    "build": "next build --turbopack",
+    "test": "jest"
+  },
+  "dependencies": {
+    // your dependencies here
+  },
+  "devDependencies": {
+    "jest": "^27.0.0",
+    "ts-jest": "^27.0.0",
+    "@types/jest": "^27.0.0"
+  }
+}
+
+module.exports = {
+  preset: 'ts-jest',
+  testEnvironment: 'node',
+  moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx', 'json', 'node'],
+  testPathIgnorePatterns: ['<rootDir>/node_modules/', '<rootDir>/dist/'],
+};
+
+import '@testing-library/jest-dom';
+
+const { setup } = require('jest-playwright');
+
+setup();
+
+test('hello world!', () => {
+  expect(true).toBe(true);
+});
+
+{
+  "compilerOptions": {
+    "target": "es6",
+    "module": "commonjs",
+    "jsx": "react",
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true
+  },
+  "include": ["src/**/*.ts", "src/**/*.tsx"],
+  "exclude": ["node_modules"]
+}
+
+import { render, screen } from '@testing-library/react';
+
+test('hello world!', () => {
+  render(<div>Hello World</div>);
+  expect(screen.getByText('Hello World')).toBeInTheDocument();
+});

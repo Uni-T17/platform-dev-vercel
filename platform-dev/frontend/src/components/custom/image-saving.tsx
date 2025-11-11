@@ -1,74 +1,83 @@
-"use client"
+"use client";
 
 import { Upload, Plus } from "lucide-react";
 import { Button } from "../ui/button";
 import { Card, CardContent, CardTitle } from "../ui/card";
 import { Control, FieldValues, Path, useController } from "react-hook-form";
 import { Input } from "../ui/input";
+import Image from "next/image";
 import { ChangeEvent, useEffect, useRef, useState } from "react";
 
 type ImageSavingProps<T extends FieldValues> = {
-    control : Control<T>
-    path : Path<T>
-    onSave ?: (file: File) => void
-}
+  control: Control<T>;
+  path: Path<T>;
+  onSave?: (file: File) => void;
+};
 
 export default function ImageSaving<T extends FieldValues>({
-    control,
-    path,
-} : ImageSavingProps<T>) {
+  control,
+  path,
+}: ImageSavingProps<T>) {
+  const fileInputRef = useRef<HTMLInputElement | null>(null);
+  const [preview, setPreview] = useState<string | null>(null);
 
-    const fileInputRef = useRef<HTMLInputElement | null>(null)
-    const [preview, setPreview] = useState<string | null>(null)
-
-
-    const {
+  const {
     field: { onChange, name },
-    } = useController({ control, name: path as any });
+  } = useController({ control, name: path });
 
-     const changeFile = (e : ChangeEvent<HTMLInputElement>) => {
-        const file = e.target.files?.[0]
-        if(file) {
-            onChange(file)
-            setPreview(URL.createObjectURL(file))
-        }
+  const changeFile = (e: ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      onChange(file);
+      setPreview(URL.createObjectURL(file));
     }
+  };
 
-
-    useEffect(() => {
+  useEffect(() => {
     return () => {
       if (preview) URL.revokeObjectURL(preview);
     };
-    }, [preview]);
+  }, [preview]);
 
+  return (
+    <Card className="mt-5">
+      <CardTitle className="ms-3">Book Photos</CardTitle>
+      <CardContent>
+        <div className="place-items-center ">
+          <Upload />
+          <h1 className="mt-3 mb-3">
+            Upload photos of your book (front cover, condition details)
+          </h1>
 
-    return(
-        <Card className="mt-5">
-            <CardTitle className="ms-3">Book Photos</CardTitle>
-            <CardContent>
-                
-                <div className="place-items-center ">
-                    <Upload/>
-                    <h1 className="mt-3 mb-3">Upload photos of your book (front cover, condition details)</h1>
+          <Input
+            name={name}
+            ref={fileInputRef}
+            onChange={changeFile}
+            className="hidden"
+            type="file"
+          />
 
-                    <Input name={name} ref={fileInputRef} onChange={changeFile} className="hidden" type="file"/>
+          <Button
+            style={{ backgroundColor: "white" }}
+            onClick={() => fileInputRef.current?.click()}
+            type="button"
+            className="flex border-1 items-center"
+          >
+            <Plus style={{ color: "black" }} />{" "}
+            <span className="text-black">Add Photos</span>
+          </Button>
 
-                    <Button style={{backgroundColor : "white"}} onClick={() => fileInputRef.current?.click()} type="button" className="flex border-1 items-center">
-                         <Plus style={{color : "black"}}/> <span className="text-black">Add Photos</span>
-                    </Button>
-
-                    {preview && (
-                    <img
-                    src={preview}
-                    alt="Preview"
-                    className="mt-4 w-48 h-48 object-cover rounded-md border"
-                    />
-                    )}
-
-                </div>
-
-                
-            </CardContent>
-        </Card>
-    )
+          {preview && (
+            <Image
+              src={preview}
+              alt="Preview"
+              width={192}
+              height={192}
+              className="mt-4 w-48 h-48 object-cover rounded-md border"
+            />
+          )}
+        </div>
+      </CardContent>
+    </Card>
+  );
 }

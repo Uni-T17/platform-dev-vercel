@@ -29,10 +29,13 @@ import { BookOpen, Check, LucideProps } from "lucide-react";
 import { input_bg, primary_color } from "@/app/color";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { BASEURL } from "@/lib/url";
 import { request } from "@/lib/base-client";
 import { POST_CONFIG, RestClientException } from "@/lib/rest-utils";
-import { ConfirmPasswordRespone, OtpRespone, VerifyRespone } from "@/lib/output/response";
+import {
+  ConfirmPasswordRespone,
+  OtpRespone,
+  VerifyRespone,
+} from "@/lib/output/response";
 
 type AuthDialogProsps = {
   open: boolean;
@@ -49,11 +52,12 @@ export default function AuthDialog({
   showTrigger = true,
   icon,
 }: AuthDialogProsps) {
-
-  const [signUpStep, setSignUpStep] = useState<"REQUEST" | "VERIFY" | "Details">("REQUEST");
+  const [signUpStep, setSignUpStep] = useState<
+    "REQUEST" | "VERIFY" | "Details"
+  >("REQUEST");
   const [otpEmail, SetOtpEmail] = useState<string>("");
-  const [rememberToken, setRememberToken] =  useState<string>("");
-  const [verifiedToken, setVerifiedToken] =  useState<string>("");
+  const [rememberToken, setRememberToken] = useState<string>("");
+  const [verifiedToken, setVerifiedToken] = useState<string>("");
 
   const router = useRouter();
   const Icon = icon;
@@ -75,27 +79,24 @@ export default function AuthDialog({
   });
 
   const OnSignIn = async (form: SignInForm) => {
-
-    console.log(form)
+    console.log(form);
 
     try {
-
       const response = await request("api/v1/login", {
-      ...POST_CONFIG,
-      body: JSON.stringify({
-         email : form.email,
-         password : form.password
+        ...POST_CONFIG,
+        body: JSON.stringify({
+          email: form.email,
+          password: form.password,
         }),
-      credentials : "include"
-       })
+        credentials: "include",
+      });
 
-      const data : ConfirmPasswordRespone =await response.json()
-      console.log(data.newUserId)
+      const data: ConfirmPasswordRespone = await response.json();
+      console.log(data.newUserId);
       useAuthStore.getState().setIsAuth(true);
       router.push("/books");
-
-    } catch(error) {
-        if (error instanceof RestClientException) {
+    } catch (error) {
+      if (error instanceof RestClientException) {
         console.error("Request error:", error.message);
       } else {
         console.error("Unexpected error:", error);
@@ -103,68 +104,59 @@ export default function AuthDialog({
     }
   };
 
-  const OnSignUp =async (form: SignUpForm) => {
-
+  const OnSignUp = async (form: SignUpForm) => {
     try {
-
       const response = await request("api/v1/confirm-password", {
-      ...POST_CONFIG,
-      body: JSON.stringify({
-         email: form.email,
-         name : form.name,
-         password : form.password,
-         confirmPassword : form.confirmPassword,
-         verifiedToken : verifiedToken
+        ...POST_CONFIG,
+        body: JSON.stringify({
+          email: form.email,
+          name: form.name,
+          password: form.password,
+          confirmPassword: form.confirmPassword,
+          verifiedToken: verifiedToken,
         }),
-      credentials : "include"
-       })
+        credentials: "include",
+      });
 
-      const data : ConfirmPasswordRespone =await response.json()
-      console.log(data.newUserId)
+      const data: ConfirmPasswordRespone = await response.json();
+      console.log(data.newUserId);
       useAuthStore.getState().setIsAuth(true);
-
-    } catch(error) {
-
+    } catch (error) {
+      console.error(error);
     }
-  
   };
 
   const OnRequestOtp = async (form: RequestOtpForm) => {
     console.log(form);
 
     try {
-
       const response = await request("api/v1/register", {
-      ...POST_CONFIG,
-      body: JSON.stringify({ email: form.email })
-       })
+        ...POST_CONFIG,
+        body: JSON.stringify({ email: form.email }),
+      });
 
-      const data : OtpRespone =await response.json()
-      setRememberToken(data.rememberToken)
-
-    } catch(error) {
-
+      const data: OtpRespone = await response.json();
+      setRememberToken(data.rememberToken);
+    } catch (error) {
+      console.error(error);
     }
   };
 
   const OnVarifyOtp = async (form: VarifyOtpForm) => {
-
-    try{
-
+    try {
       const response = await request("api/v1/verify-otp", {
         ...POST_CONFIG,
-        body : JSON.stringify({
-          email : form.email,
-          otp : form.otp,
-          rememberToken : rememberToken
-        })
-      })
+        body: JSON.stringify({
+          email: form.email,
+          otp: form.otp,
+          rememberToken: rememberToken,
+        }),
+      });
 
-      const data : VerifyRespone = await response.json()
-      setVerifiedToken(data.verifiedToken)
-
-    }catch (error) {
-
+      const data: VerifyRespone = await response.json();
+      setVerifiedToken(data.verifiedToken);
+    } catch (error) {
+      console.error(error);
     }
   };
 

@@ -1,0 +1,49 @@
+{
+  "name": "bookex",
+  "version": "0.1.0",
+  "scripts": {
+    "build": "next build --turbopack",
+    "test": "jest"
+  },
+  "dependencies": {
+    // your dependencies here
+  },
+  "devDependencies": {
+    "jest": "^27.0.0",
+    "ts-jest": "^27.0.0",
+    "@types/jest": "^27.0.0"
+  }
+}
+
+module.exports = {
+  testEnvironment: 'jsdom',
+  moduleFileExtensions: ['js', 'jsx', 'ts', 'tsx', 'json', 'node'],
+  transform: {
+    '^.+\\.tsx?$': 'ts-jest',
+  },
+  setupFilesAfterEnv: ['./jest.setup.ts'],
+  testPathIgnorePatterns: ['/node_modules/', '/.next/'],
+};
+
+import '@testing-library/jest-dom/extend-expect';
+
+export {}; 
+
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "outDir": "./dist",
+    "types": ["jest", "node"]
+  },
+  "include": ["src/**/*.ts", "src/**/*.tsx"],
+  "exclude": ["node_modules", "**/*.spec.ts", "**/*.test.ts"]
+}
+
+import { render, screen } from '@testing-library/react';
+import Hello from '../../components/Hello';
+
+test('renders hello world', () => {
+  render(<Hello />);
+  const linkElement = screen.getByText(/hello world/i);
+  expect(linkElement).toBeInTheDocument();
+});
